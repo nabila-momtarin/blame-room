@@ -1,13 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Post, Patch } from '@nestjs/common';
 import { DepartmentService } from './department.service';
+import { CreateDepartmentDto } from './dto/create-department.dto';
+import { UpdateDepartmentDto } from './dto/update-department.dto';
 
 @Controller('departments')
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
 
   @Post()
-  createDepartment(@Body('name') name: string) {
-    return this.departmentService.createDept(name);
+  createDepartment(@Body() dto: CreateDepartmentDto) {
+    return this.departmentService.createDept(dto);
   }
 
   @Get()
@@ -21,8 +23,8 @@ export class DepartmentController {
   }
 
   @Patch(':id')
-  async updateDepartment(@Param('id') id: string, @Body('name') name: string) {
-    return this.departmentService.updateDept(id, name);
+  async updateDepartment(@Param('id') id: string, @Body() dto: UpdateDepartmentDto) {
+    return this.departmentService.updateDept(id, dto);
   }
 
     @Delete(':id')

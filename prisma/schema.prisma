@@ -5,7 +5,8 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated"
+  output   = "../generated/prisma"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -13,7 +14,23 @@ datasource db {
 }
 
 model Department {
-  id        String    @id @default(uuid())
-  name      String    @unique
-  createdAt DateTime  @default(now())
+  id              String     @id @default(uuid())
+  name            String     @unique
+  createdAt       DateTime   @default(now())
+  employees       Employee[]
+}
+
+model Employee {
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  departmentId    String
+  department      Department @relation(fields: [departmentId], references: [id])
+
+  TLId    String?
+  TL      Employee?  @relation("Team", fields: [TLId], references: [id])
+  teamMembers     Employee[] @relation("Team")
 }
