@@ -18,8 +18,8 @@ export class DepartmentService {
   }
 
   //get all departments
-  getAllDepts() {
-    const departments = this.prisma.department.findMany();
+  async getAllDepts() {
+    const departments = await this.prisma.department.findMany();
     console.log('All Departments:', departments);
     return departments;
   }

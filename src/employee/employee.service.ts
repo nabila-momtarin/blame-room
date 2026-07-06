@@ -7,8 +7,8 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 export class EmployeeService {
   constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateEmployeeDto) {
-    return this.prisma.employee.create({
+  async create(dto: CreateEmployeeDto) {
+    const newEmployee = await this.prisma.employee.create({
       data: {
         name: dto.name,
         email: dto.email,
@@ -16,6 +16,8 @@ export class EmployeeService {
         ...(dto.TLId && { TL: { connect: { id: dto.TLId } } }),
       },
     });
+    console.log('Created Employee:', newEmployee);
+    return newEmployee;
   }
 
   findAll() {
@@ -61,8 +63,13 @@ export class EmployeeService {
   async remove(id: string) {
     await this.findOne(id);
 
-    return this.prisma.employee.delete({
+    const deletedEmployee = await this.prisma.employee.delete({
       where: { id },
     });
+
+    console.log('Deleted Employee:', deletedEmployee);
+    return {
+      message: `Employee with id ${id} has been deleted`,
+    };
   }
 }
